@@ -7,18 +7,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import br.com.hellodev.design.presenter.components.loading.CircularProgressLoading
+import br.com.hellodev.design.presenter.components.spacer.VerticalSpacer
 import br.com.hellodev.design.presenter.theme.ColorScheme
 import br.com.hellodev.main.data.VideoItem
-import br.com.hellodev.main.data.rememberVideoAccessState
 import br.com.hellodev.main.data.rememberVideoDataSource
 import br.com.hellodev.main.presenter.features.video_list.action.VideoListAction
 import br.com.hellodev.main.presenter.features.video_list.component.VideoListItem
@@ -28,38 +30,54 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun VideoListScreen(
     onVideoClick: (VideoItem) -> Unit,
+    onPermissionRequired: () -> Unit,
 ) {
-    val videoAccessState = rememberVideoAccessState()
     val dataSource = rememberVideoDataSource()
     val viewModel = koinViewModel<VideoListViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(videoAccessState.hasAccess, dataSource) {
+    LaunchedEffect(dataSource) {
         viewModel.dispatchAction(
             VideoListAction.Refresh(
-                hasAccess = videoAccessState.hasAccess,
                 dataSource = dataSource,
             ),
         )
+    }
+    LaunchedEffect(state.isPermissionRequired) {
+        if (state.isPermissionRequired) onPermissionRequired()
     }
 
     Scaffold(
         containerColor = ColorScheme.colorScheme.screen.backgroundPrimary,
     ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             when {
                 state.isLoading -> {
-                    Text(text = "Carregando videos...")
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CircularProgressLoading()
+
+                        VerticalSpacer(size = 16)
+
+                        Text(
+                            text = "Carregando videos...",
+                            style = TextStyle(
+                                color = ColorScheme.colorScheme.text.primaryColor
+                            )
+                        )
+                    }
                 }
 
                 state.isPermissionRequired -> {
-                    Text(text = "Permita acesso aos videos e imagens para listar os arquivos da pasta \"videos\" e usar miniaturas.")
-                    Button(onClick = videoAccessState.requestAccess) {
-                        Text("Permitir acesso")
-                    }
+                    Text(text = "Permissao necessaria para continuar.")
                 }
 
                 state.errorMessage != null -> {

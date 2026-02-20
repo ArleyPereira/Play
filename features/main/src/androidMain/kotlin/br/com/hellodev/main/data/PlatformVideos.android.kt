@@ -1,24 +1,11 @@
 package br.com.hellodev.main.data
 
-import android.Manifest
 import android.content.ContentUris
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
 import android.provider.MediaStore
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -29,76 +16,12 @@ actual fun rememberVideoDataSource(): VideoDataSource {
     return remember(context) { AndroidMediaStoreVideoDataSource(context) }
 }
 
-@Composable
-actual fun rememberVideoAccessState(): VideoAccessState {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val requiredPermissions = remember {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arrayOf(Manifest.permission.READ_MEDIA_VIDEO)
-        } else {
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-    }
-    val requestedPermissions = remember {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arrayOf(
-                Manifest.permission.READ_MEDIA_VIDEO,
-                Manifest.permission.READ_MEDIA_IMAGES,
-            )
-        } else {
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-    }
-
-    val hasRequiredPermissions = remember(context, requiredPermissions) {
-        {
-            requiredPermissions.all { permission ->
-                ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
-            }
-        }
-    }
-
-    var hasAccess by remember {
-        mutableStateOf(hasRequiredPermissions())
-    }
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions(),
-    ) {
-        hasAccess = hasRequiredPermissions()
-    }
-
-    DisposableEffect(lifecycleOwner, hasRequiredPermissions) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                hasAccess = hasRequiredPermissions()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
-    return remember(hasAccess, launcher) {
-        VideoAccessState(
-            hasAccess = hasAccess,
-            requestAccess = { launcher.launch(requestedPermissions) },
-        )
-    }
-}
-
 private class AndroidMediaStoreVideoDataSource(
     private val context: Context,
 ) : VideoDataSource {
 
     @Suppress("DEPRECATION")
     override suspend fun listVideos(): List<VideoItem> = withContext(Dispatchers.IO) {
-        if (!hasReadPermission(context)) {
-            throw VideoPermissionException()
-        }
-
         val projection = arrayOf(
             MediaStore.Video.Media._ID,
             MediaStore.Video.Media.DISPLAY_NAME,
@@ -111,51 +34,55 @@ private class AndroidMediaStoreVideoDataSource(
         val videos = mutableListOf<VideoItem>()
         val sortOrder = "${MediaStore.Video.Media.DATE_MODIFIED} DESC"
 
-        context.contentResolver.query(
-            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-            projection,
-            null,
-            null,
-            sortOrder,
-        )?.use { cursor ->
-            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
-            val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
-            val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
-            val durationColumn = cursor.getColumnIndex(MediaStore.Video.Media.DURATION)
-            val relativePathColumn = cursor.getColumnIndex(MediaStore.Video.Media.RELATIVE_PATH)
-            val absolutePathColumn = cursor.getColumnIndex(MediaStore.Video.Media.DATA)
+        try {
+            context.contentResolver.query(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                null,
+                null,
+                sortOrder,
+            )?.use { cursor ->
+                val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
+                val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
+                val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
+                val durationColumn = cursor.getColumnIndex(MediaStore.Video.Media.DURATION)
+                val relativePathColumn = cursor.getColumnIndex(MediaStore.Video.Media.RELATIVE_PATH)
+                val absolutePathColumn = cursor.getColumnIndex(MediaStore.Video.Media.DATA)
 
-            while (cursor.moveToNext()) {
-                val id = cursor.getLong(idColumn)
-                val name = cursor.getString(nameColumn) ?: "video_$id"
-                val size = cursor.getLong(sizeColumn)
-                val duration = if (durationColumn >= 0 && !cursor.isNull(durationColumn)) {
-                    cursor.getLong(durationColumn)
-                } else {
-                    null
+                while (cursor.moveToNext()) {
+                    val id = cursor.getLong(idColumn)
+                    val name = cursor.getString(nameColumn) ?: "video_$id"
+                    val size = cursor.getLong(sizeColumn)
+                    val duration = if (durationColumn >= 0 && !cursor.isNull(durationColumn)) {
+                        cursor.getLong(durationColumn)
+                    } else {
+                        null
+                    }
+                    val relativePath = if (relativePathColumn >= 0) cursor.getString(relativePathColumn) else null
+                    val absolutePath = if (absolutePathColumn >= 0) cursor.getString(absolutePathColumn) else null
+
+                    if (!belongsToVideosFolder(relativePath = relativePath, absolutePath = absolutePath)) {
+                        continue
+                    }
+
+                    val contentUri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
+                    val thumbnailPath = findThumbnailPathForVideo(
+                        absolutePath = absolutePath,
+                        relativePath = relativePath,
+                        videoName = name,
+                    )
+                    videos += VideoItem(
+                        id = id.toString(),
+                        name = name,
+                        path = absolutePath ?: contentUri.toString(),
+                        thumbnailPath = thumbnailPath,
+                        sizeInBytes = size,
+                        durationMillis = duration,
+                    )
                 }
-                val relativePath = if (relativePathColumn >= 0) cursor.getString(relativePathColumn) else null
-                val absolutePath = if (absolutePathColumn >= 0) cursor.getString(absolutePathColumn) else null
-
-                if (!belongsToVideosFolder(relativePath = relativePath, absolutePath = absolutePath)) {
-                    continue
-                }
-
-                val contentUri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
-                val thumbnailPath = findThumbnailPathForVideo(
-                    absolutePath = absolutePath,
-                    relativePath = relativePath,
-                    videoName = name,
-                )
-                videos += VideoItem(
-                    id = id.toString(),
-                    name = name,
-                    path = absolutePath ?: contentUri.toString(),
-                    thumbnailPath = thumbnailPath,
-                    sizeInBytes = size,
-                    durationMillis = duration,
-                )
             }
+        } catch (_: SecurityException) {
+            throw VideoPermissionException()
         }
 
         if (videos.isNotEmpty()) {
@@ -179,18 +106,6 @@ private class AndroidMediaStoreVideoDataSource(
 
         if (normalized.isEmpty()) return false
         return normalized.split('/').any { it == "videos" }
-    }
-
-    private fun hasReadPermission(context: Context): Boolean {
-        val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arrayOf(Manifest.permission.READ_MEDIA_VIDEO)
-        } else {
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-
-        return requiredPermissions.all { permission ->
-            ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
-        }
     }
 
     private fun listVideosFromKnownFolders(): List<VideoItem> {

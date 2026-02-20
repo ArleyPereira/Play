@@ -8,6 +8,9 @@ sealed class MainRoutes {
     object Graph : MainRoutes()
 
     @Serializable
+    object Permission : MainRoutes()
+
+    @Serializable
     object VideoList : MainRoutes()
 
     @Serializable

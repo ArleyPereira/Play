@@ -4,7 +4,7 @@ import br.com.hellodev.main.data.VideoItem
 
 data class VideoListState(
     val isLoading: Boolean = false,
-    val isPermissionRequired: Boolean = true,
+    val isPermissionRequired: Boolean = false,
     val videos: List<VideoItem> = emptyList(),
     val errorMessage: String? = null,
 )

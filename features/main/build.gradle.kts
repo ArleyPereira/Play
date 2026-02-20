@@ -34,6 +34,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.moko.permissions.gallery)
         }
 
         commonMain.dependencies {
@@ -48,6 +49,9 @@ kotlin {
             implementation(libs.compose.components.resources)
             implementation(libs.compose.navigation)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.moko.permissions)
+            implementation(libs.moko.permissions.compose)
+            implementation(libs.moko.permissions.gallery)
             implementation(libs.material3)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodel)
@@ -55,7 +59,7 @@ kotlin {
         }
 
         iosMain.dependencies {
-
+            implementation(libs.moko.permissions.gallery)
         }
     }
 

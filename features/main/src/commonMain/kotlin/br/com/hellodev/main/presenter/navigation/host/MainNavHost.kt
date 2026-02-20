@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import br.com.hellodev.main.data.VideoItem
+import br.com.hellodev.main.presenter.features.permission.screen.PermissionScreen
 import br.com.hellodev.main.presenter.features.video_list.screen.VideoListScreen
 import br.com.hellodev.main.presenter.features.video_player.screen.VideoPlayerScreen
 import br.com.hellodev.main.presenter.navigation.routes.MainRoutes
@@ -14,8 +15,20 @@ fun NavGraphBuilder.mainNavHost(
     navHostController: NavHostController
 ) {
     navigation<MainRoutes.Graph>(
-        startDestination = MainRoutes.VideoList,
+        startDestination = MainRoutes.Permission,
     ) {
+        composable<MainRoutes.Permission> {
+            PermissionScreen(
+                onPermissionGranted = {
+                    navHostController.navigate(MainRoutes.VideoList) {
+                        popUpTo(MainRoutes.Permission) {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
+        }
+
         composable<MainRoutes.VideoList> {
             VideoListScreen(
                 onVideoClick = { video ->
@@ -29,6 +42,13 @@ fun NavGraphBuilder.mainNavHost(
                             durationMillis = video.durationMillis,
                         ),
                     )
+                },
+                onPermissionRequired = {
+                    navHostController.navigate(MainRoutes.Permission) {
+                        popUpTo(MainRoutes.VideoList) {
+                            inclusive = true
+                        }
+                    }
                 },
             )
         }

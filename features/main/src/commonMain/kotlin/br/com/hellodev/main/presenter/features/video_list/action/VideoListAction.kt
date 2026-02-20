@@ -5,7 +5,6 @@ import br.com.hellodev.main.data.VideoItem
 
 sealed interface VideoListAction {
     data class Refresh(
-        val hasAccess: Boolean,
         val dataSource: VideoDataSource,
     ) : VideoListAction
 

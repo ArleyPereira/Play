@@ -17,11 +17,6 @@ import platform.Foundation.NSUserDomainMask
 @Composable
 actual fun rememberVideoDataSource(): VideoDataSource = remember { IOSVideoDataSource() }
 
-@Composable
-actual fun rememberVideoAccessState(): VideoAccessState = remember {
-    VideoAccessState(hasAccess = true, requestAccess = {})
-}
-
 private class IOSVideoDataSource : VideoDataSource {
     override suspend fun listVideos(): List<VideoItem> = withContext(Dispatchers.Default) {
         val fileManager = NSFileManager.defaultManager

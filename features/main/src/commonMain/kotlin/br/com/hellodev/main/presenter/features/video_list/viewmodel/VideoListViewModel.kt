@@ -18,30 +18,14 @@ class VideoListViewModel : ViewModel() {
 
     fun dispatchAction(action: VideoListAction) {
         when (action) {
-            is VideoListAction.Refresh -> refresh(
-                hasAccess = action.hasAccess,
-                dataSource = action.dataSource,
-            )
+            is VideoListAction.Refresh -> refresh(dataSource = action.dataSource)
             is VideoListAction.OnVideoClick -> Unit
         }
     }
 
     private fun refresh(
-        hasAccess: Boolean,
         dataSource: VideoDataSource,
     ) {
-        if (!hasAccess) {
-            _state.update { current ->
-                current.copy(
-                    isLoading = false,
-                    isPermissionRequired = true,
-                    videos = emptyList(),
-                    errorMessage = null,
-                )
-            }
-            return
-        }
-
         viewModelScope.launch {
             _state.update { current ->
                 current.copy(

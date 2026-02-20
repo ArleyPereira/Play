@@ -13,6 +13,7 @@ uiTooling = "1.10.3"
 koin = "4.1.1"
 kotlinx-serialization-json = "1.10.0"
 moko-permissions = "0.20.1"
+compose-multiplatform-media-player = "1.0.53"
 
 [libraries]
 # AndroidX
@@ -43,6 +44,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 moko-permissions = { module = "dev.icerock.moko:permissions", version.ref = "moko-permissions" }
 moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko-permissions" }
 moko-permissions-gallery = { module = "dev.icerock.moko:permissions-gallery", version.ref = "moko-permissions" }
+compose-multiplatform-media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "compose-multiplatform-media-player" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

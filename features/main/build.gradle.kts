@@ -52,6 +52,7 @@ kotlin {
             implementation(libs.moko.permissions)
             implementation(libs.moko.permissions.compose)
             implementation(libs.moko.permissions.gallery)
+            implementation(libs.compose.multiplatform.media.player)
             implementation(libs.material3)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodel)

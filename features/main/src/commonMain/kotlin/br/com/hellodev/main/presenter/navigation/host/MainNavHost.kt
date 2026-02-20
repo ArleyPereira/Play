@@ -1,0 +1,54 @@
+package br.com.hellodev.main.presenter.navigation.host
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import androidx.navigation.toRoute
+import br.com.hellodev.main.data.VideoItem
+import br.com.hellodev.main.presenter.features.video_list.screen.VideoListScreen
+import br.com.hellodev.main.presenter.features.video_player.screen.VideoPlayerScreen
+import br.com.hellodev.main.presenter.navigation.routes.MainRoutes
+
+fun NavGraphBuilder.mainNavHost(
+    navHostController: NavHostController
+) {
+    navigation<MainRoutes.Graph>(
+        startDestination = MainRoutes.VideoList,
+    ) {
+        composable<MainRoutes.VideoList> {
+            VideoListScreen(
+                onVideoClick = { video ->
+                    navHostController.navigate(
+                        MainRoutes.VideoPlayer(
+                            id = video.id,
+                            name = video.name,
+                            path = video.path,
+                            thumbnailPath = video.thumbnailPath,
+                            sizeInBytes = video.sizeInBytes,
+                            durationMillis = video.durationMillis,
+                        ),
+                    )
+                },
+            )
+        }
+
+        composable<MainRoutes.VideoPlayer> { backStackEntry ->
+            val route = backStackEntry.toRoute<MainRoutes.VideoPlayer>()
+
+            val video = VideoItem(
+                id = route.id,
+                name = route.name,
+                path = route.path,
+                thumbnailPath = route.thumbnailPath,
+                sizeInBytes = route.sizeInBytes,
+                durationMillis = route.durationMillis,
+            )
+
+            VideoPlayerScreen(
+                video = video,
+                onBack = { navHostController.popBackStack() },
+            )
+        }
+    }
+}

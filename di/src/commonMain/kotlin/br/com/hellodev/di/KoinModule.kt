@@ -1,11 +1,11 @@
 package br.com.hellodev.di
 
+import br.com.hellodev.main.di.mainModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 
 private val playModules = listOf(
-    module { }
+    mainModule,
 )
 
 fun initializeKoin(

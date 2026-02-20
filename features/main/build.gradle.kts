@@ -5,11 +5,12 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
     androidLibrary {
-        namespace = "br.com.hellodev.play.library"
+        namespace = "br.com.hellodev.main"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
@@ -34,15 +35,9 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
         }
+
         commonMain.dependencies {
-            // Design
             implementation(project(":design"))
-
-            // DI
-            implementation(project(":di"))
-
-            // Features
-            implementation(project(":features:main"))
 
             // Koin
             implementation(libs.koin.core)
@@ -52,17 +47,16 @@ kotlin {
             // Compose Resources
             implementation(libs.compose.components.resources)
             implementation(libs.compose.navigation)
+            implementation(libs.kotlinx.serialization.json)
             implementation(libs.material3)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
         }
-        commonTest.dependencies {
+
+        iosMain.dependencies {
 
         }
     }
-}
 
-dependencies {
-    androidRuntimeClasspath(libs.compose.ui.tooling)
 }

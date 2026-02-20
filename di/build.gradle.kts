@@ -30,6 +30,7 @@ kotlin {
             implementation(libs.koin.android)
         }
         commonMain.dependencies {
+            implementation(project(":features:main"))
             implementation(libs.koin.core)
         }
     }

@@ -38,7 +38,14 @@ kotlin {
         }
 
         commonMain.dependencies {
+            // Design
             implementation(project(":design"))
+
+            // Core
+            implementation(project(":core"))
+
+            // Domain
+            implementation(project(":domain"))
 
             // Koin
             implementation(libs.koin.core)

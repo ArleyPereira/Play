@@ -23,17 +23,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.hellodev.design.presenter.components.loading.CircularProgressLoading
 import br.com.hellodev.design.presenter.components.spacer.VerticalSpacer
 import br.com.hellodev.design.presenter.theme.ColorScheme
-import br.com.hellodev.main.data.VideoItem
+import br.com.hellodev.domain.model.video.VideoItem
 import br.com.hellodev.main.data.rememberVideoDataSource
 import br.com.hellodev.main.presenter.features.video_list.action.VideoListAction
 import br.com.hellodev.main.presenter.features.video_list.component.VideoListItem
+import br.com.hellodev.main.presenter.features.video_list.state.VideoListState
 import br.com.hellodev.main.presenter.features.video_list.viewmodel.VideoListViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun VideoListScreen(
-    onVideoClick: (VideoItem) -> Unit,
-    onPermissionRequired: () -> Unit,
+    navigateToVideoPlayerScreen: (VideoItem) -> Unit,
+    onPermissionRequired: () -> Unit
 ) {
     val dataSource = rememberVideoDataSource()
     val viewModel = koinViewModel<VideoListViewModel>()
@@ -41,17 +42,29 @@ fun VideoListScreen(
 
     LaunchedEffect(dataSource) {
         viewModel.dispatchAction(
-            VideoListAction.Refresh(
-                dataSource = dataSource,
-            ),
+            VideoListAction.Refresh(dataSource = dataSource)
         )
     }
+
     LaunchedEffect(state.isPermissionRequired) {
-        if (state.isPermissionRequired) onPermissionRequired()
+        if (state.isPermissionRequired) {
+            onPermissionRequired()
+        }
     }
 
+    VideoListContent(
+        state = state,
+        navigateToVideoPlayerScreen = navigateToVideoPlayerScreen
+    )
+}
+
+@Composable
+private fun VideoListContent(
+    state: VideoListState,
+    navigateToVideoPlayerScreen: (VideoItem) -> Unit
+) {
     Scaffold(
-        containerColor = ColorScheme.colorScheme.screen.backgroundPrimary,
+        containerColor = ColorScheme.colorScheme.screen.backgroundPrimary
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -88,9 +101,7 @@ fun VideoListScreen(
                 }
 
                 state.errorMessage != null -> {
-                    state.errorMessage?.let { message ->
-                        Text(text = message)
-                    }
+                    Text(text = state.errorMessage)
                 }
 
                 state.videos.isEmpty() -> {
@@ -112,8 +123,9 @@ fun VideoListScreen(
                             VideoListItem(
                                 video = video,
                                 onClick = {
-                                    viewModel.dispatchAction(VideoListAction.OnVideoClick(video))
-                                    onVideoClick(video)
+                                    navigateToVideoPlayerScreen(video)
+                                    //viewModel.dispatchAction(VideoListAction.OnVideoClick(video))
+                                    //onVideoClick(video)
                                 },
                             )
                         }

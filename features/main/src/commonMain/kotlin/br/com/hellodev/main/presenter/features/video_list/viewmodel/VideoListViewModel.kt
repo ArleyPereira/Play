@@ -23,9 +23,7 @@ class VideoListViewModel : ViewModel() {
         }
     }
 
-    private fun refresh(
-        dataSource: VideoDataSource,
-    ) {
+    private fun refresh(dataSource: VideoDataSource) {
         viewModelScope.launch {
             _state.update { current ->
                 current.copy(

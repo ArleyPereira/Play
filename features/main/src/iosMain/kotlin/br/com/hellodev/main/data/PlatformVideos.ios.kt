@@ -2,6 +2,7 @@ package br.com.hellodev.main.data
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import br.com.hellodev.domain.model.video.VideoItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import platform.AVFoundation.AVURLAsset

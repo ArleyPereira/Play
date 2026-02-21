@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import br.com.hellodev.design.presenter.theme.DefaultColor
-import br.com.hellodev.main.data.VideoItem
+import br.com.hellodev.domain.model.video.VideoItem
 import chaintech.videoplayer.host.MediaPlayerHost
 import chaintech.videoplayer.model.ScreenResize
 import chaintech.videoplayer.model.VideoPlayerConfig
@@ -36,6 +36,7 @@ fun VideoPlayerScreen(
             seekBarTrackHeight = 6.dp,
             enableBackButton = true,
             backActionCallback = onBack,
+            isFullScreenEnabled = false,
         )
     }
 

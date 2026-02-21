@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import br.com.hellodev.design.presenter.theme.ColorScheme
 import br.com.hellodev.design.presenter.theme.ThemeType
-import br.com.hellodev.design.presenter.theme.borderStrokeDefault
 import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
 
 @Composable
@@ -31,7 +30,10 @@ fun DefaultCardUI(
             containerColor = ColorScheme.colorScheme.screen.backgroundSecondary,
             disabledContainerColor = ColorScheme.colorScheme.screen.backgroundSecondary
         ),
-        border = borderStrokeDefault(),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        ),
+        //border = borderStrokeDefault(),
         shape = shape,
         enabled = enabled,
         content = { content() }

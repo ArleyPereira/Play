@@ -1,6 +1,6 @@
 package br.com.hellodev.main.presenter.features.video_list.state
 
-import br.com.hellodev.main.data.VideoItem
+import br.com.hellodev.domain.model.video.VideoItem
 
 data class VideoListState(
     val isLoading: Boolean = false,

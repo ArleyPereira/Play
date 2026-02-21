@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import br.com.hellodev.main.data.VideoItem
+import br.com.hellodev.domain.model.video.VideoItem
 import br.com.hellodev.main.presenter.features.permission.screen.PermissionScreen
 import br.com.hellodev.main.presenter.features.video_list.screen.VideoListScreen
 import br.com.hellodev.main.presenter.features.video_player.screen.VideoPlayerScreen
@@ -31,7 +31,7 @@ fun NavGraphBuilder.mainNavHost(
 
         composable<MainRoutes.VideoList> {
             VideoListScreen(
-                onVideoClick = { video ->
+                navigateToVideoPlayerScreen = { video ->
                     navHostController.navigate(
                         MainRoutes.VideoPlayer(
                             id = video.id,

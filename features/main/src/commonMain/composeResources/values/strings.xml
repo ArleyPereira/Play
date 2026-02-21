@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--    BottomAppBar-->
+    <string name="label_home_bottom_app_bar">Início</string>
+    <string name="label_settings_bottom_app_bar">Configurações</string>
+
+</resources>

@@ -52,14 +52,18 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
+            // Moko Permissions
+            //implementation(libs.moko.permissions)
+            //implementation(libs.moko.permissions.compose)
+            //implementation(libs.moko.permissions.gallery)
+
+            // Media Player
+            implementation(libs.compose.multiplatform.media.player)
+
             // Compose Resources
             implementation(libs.compose.components.resources)
             implementation(libs.compose.navigation)
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.moko.permissions)
-            implementation(libs.moko.permissions.compose)
-            implementation(libs.moko.permissions.gallery)
-            implementation(libs.compose.multiplatform.media.player)
             implementation(libs.material3)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodel)

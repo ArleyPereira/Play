@@ -35,6 +35,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun VideoListScreen(
+    paddingValues: PaddingValues = PaddingValues(),
     navigateToVideoPlayerScreen: (VideoItem) -> Unit,
     onPermissionRequired: () -> Unit
 ) {
@@ -55,6 +56,7 @@ fun VideoListScreen(
     }
 
     VideoListContent(
+        paddingValues = paddingValues,
         state = state,
         navigateToVideoPlayerScreen = navigateToVideoPlayerScreen
     )
@@ -62,12 +64,13 @@ fun VideoListScreen(
 
 @Composable
 private fun VideoListContent(
+    paddingValues: PaddingValues = PaddingValues(),
     state: VideoListState,
     navigateToVideoPlayerScreen: (VideoItem) -> Unit
 ) {
     Scaffold(
         containerColor = ColorScheme.colorScheme.screen.backgroundPrimary
-    ) { paddingValues ->
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -130,10 +133,7 @@ private fun VideoListContent(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp),
-                        contentPadding = PaddingValues(
-                            top = paddingValues.calculateTopPadding() + 16.dp,
-                            bottom = paddingValues.calculateBottomPadding() + 16.dp,
-                        ),
+                        contentPadding = paddingValues,
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         items(state.videos, key = VideoItem::id) { video ->
@@ -141,8 +141,6 @@ private fun VideoListContent(
                                 video = video,
                                 onClick = {
                                     navigateToVideoPlayerScreen(video)
-                                    //viewModel.dispatchAction(VideoListAction.OnVideoClick(video))
-                                    //onVideoClick(video)
                                 },
                             )
                         }

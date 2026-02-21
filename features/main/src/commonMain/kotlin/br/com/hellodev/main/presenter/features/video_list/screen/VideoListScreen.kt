@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -105,7 +107,22 @@ private fun VideoListContent(
                 }
 
                 state.videos.isEmpty() -> {
-                    Text(text = "Nenhum video encontrado na pasta \"videos\".")
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Verifique se tem videos salvos no dispositivo e que a permissão de acesso aos vídeos e fotos esteja liberada.",
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            style = TextStyle(
+                                color = ColorScheme.colorScheme.text.primaryColor,
+                                textAlign = TextAlign.Center
+                            )
+                        )
+                    }
                 }
 
                 else -> {

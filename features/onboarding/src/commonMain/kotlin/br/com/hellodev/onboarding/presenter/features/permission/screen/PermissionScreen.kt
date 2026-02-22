@@ -30,6 +30,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import br.com.hellodev.design.presenter.components.button.PrimaryButton
 import br.com.hellodev.design.presenter.theme.ColorScheme
+import br.com.hellodev.onboarding.presenter.features.permission.platform.ensureDefaultPlayFolderExists
 import br.com.hellodev.onboarding.presenter.features.permission.platform.rememberOpenAppSettingsAction
 import br.com.hellodev.onboarding.presenter.features.permission.platform.rememberPermanentPermissionFlagStore
 import dev.icerock.moko.permissions.DeniedAlwaysException
@@ -45,7 +46,7 @@ import play.features.onboarding.generated.resources.permission_placeholder
 
 @Composable
 fun PermissionScreen(
-    navigateToHomeScreen: () -> Unit
+    navigateToHomeScreen: () -> Unit,
 ) {
     val permissionsControllerFactory = rememberPermissionsControllerFactory()
     val permissionsController = remember(permissionsControllerFactory) {
@@ -75,9 +76,11 @@ fun PermissionScreen(
         if (hasPermission) {
             isPermissionPermanentlyDenied = false
             permanentPermissionFlagStore.setPermanentlyDenied(false)
+            ensureDefaultPlayFolderExists()
             navigateToVideoList()
         }
     }
+
     DisposableEffect(lifecycleOwner, permissionsController) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
@@ -88,6 +91,7 @@ fun PermissionScreen(
                         isPermissionPermanentlyDenied = false
                         permanentPermissionFlagStore.setPermanentlyDenied(false)
                         errorMessage = null
+                        ensureDefaultPlayFolderExists()
                         navigateToVideoList()
                     }
                 }
@@ -110,16 +114,14 @@ fun PermissionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Column(
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Image(
                         painter = painterResource(Res.drawable.permission_placeholder),
                         contentDescription = null,
-                        modifier = Modifier
-                            .height(250.dp)
+                        modifier = Modifier.height(250.dp),
                     )
 
                     Spacer(modifier = Modifier.height(36.dp))
@@ -130,8 +132,8 @@ fun PermissionScreen(
                             color = ColorScheme.colorScheme.text.primaryColor,
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
+                            textAlign = TextAlign.Center,
+                        ),
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -142,8 +144,8 @@ fun PermissionScreen(
                             color = ColorScheme.colorScheme.text.secondaryColor,
                             fontSize = 16.sp,
                             lineHeight = 24.sp,
-                            textAlign = TextAlign.Center
-                        )
+                            textAlign = TextAlign.Center,
+                        ),
                     )
 
                     errorMessage?.let { message ->
@@ -167,6 +169,7 @@ fun PermissionScreen(
                                     isPermissionPermanentlyDenied = false
                                     permanentPermissionFlagStore.setPermanentlyDenied(false)
                                     errorMessage = null
+                                    ensureDefaultPlayFolderExists()
                                     navigateToVideoList()
                                 } else {
                                     openAppSettings()
@@ -177,6 +180,7 @@ fun PermissionScreen(
                                     permissionsController.providePermission(Permission.GALLERY)
                                     isPermissionPermanentlyDenied = false
                                     permanentPermissionFlagStore.setPermanentlyDenied(false)
+                                    ensureDefaultPlayFolderExists()
                                     navigateToVideoList()
                                 } catch (_: DeniedAlwaysException) {
                                     isPermissionPermanentlyDenied = true
@@ -192,11 +196,10 @@ fun PermissionScreen(
                             }
                         }
                     },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    text = if (isPermissionPermanentlyDenied) "Configuracoes" else "Permitir"
+                    modifier = Modifier.fillMaxWidth(),
+                    text = if (isPermissionPermanentlyDenied) "Configuracoes" else "Permitir",
                 )
             }
-        }
+        },
     )
 }

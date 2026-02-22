@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -30,15 +29,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.hellodev.core.enums.illustration.IllustrationType.IC_FOLDER_FILL
 import br.com.hellodev.design.presenter.components.button.PrimaryButton
-import br.com.hellodev.design.presenter.components.button.SecondaryButton
 import br.com.hellodev.design.presenter.components.card.default.DefaultCardUI
 import br.com.hellodev.design.presenter.components.icon.illustration.getDrawableIllustration
+import br.com.hellodev.design.presenter.components.snackbar.FeedbackUI
 import br.com.hellodev.design.presenter.theme.ColorScheme
 import br.com.hellodev.design.presenter.theme.HelloTheme
 import br.com.hellodev.design.presenter.theme.ThemeType
 import br.com.hellodev.design.presenter.theme.borderDefault
 import br.com.hellodev.design.presenter.theme.helloFontFamily
 import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
+import br.com.hellodev.main.presenter.features.settings.action.SettingsAction
 import br.com.hellodev.main.presenter.features.settings.state.SettingsState
 import br.com.hellodev.main.presenter.features.settings.viewmodel.SettingsViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -46,24 +46,40 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     val viewModel = koinViewModel<SettingsViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     SettingsContent(
         paddingValues = paddingValues,
-        state = state
+        state = state,
+        action = viewModel::dispatchAction
     )
 }
 
 @Composable
 fun SettingsContent(
     paddingValues: PaddingValues,
-    state: SettingsState
+    state: SettingsState,
+    action: (SettingsAction) -> Unit
 ) {
     Scaffold(
-        containerColor = ColorScheme.colorScheme.screen.backgroundPrimary
+        containerColor = ColorScheme.colorScheme.screen.backgroundPrimary,
+        bottomBar = {
+            state.feedback?.let { feedback ->
+                FeedbackUI(
+                    modifier = Modifier
+                        .padding(
+                            bottom = paddingValues.calculateBottomPadding()
+                        ),
+                    feedback = feedback,
+                    onDismiss = {
+                        action(SettingsAction.DismissFeedback)
+                    }
+                )
+            }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -73,8 +89,7 @@ fun SettingsContent(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Column(
-                verticalArrangement = Arrangement
-                    .spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Text(
                     text = "Pasta atual dos vídeos",
@@ -82,7 +97,7 @@ fun SettingsContent(
                         color = ColorScheme.colorScheme.text.primaryColor,
                         fontFamily = helloFontFamily(),
                         fontSize = 22.sp,
-                        fontWeight = FontWeight(700)
+                        fontWeight = FontWeight(700),
                     ),
                 )
 
@@ -116,17 +131,15 @@ fun SettingsContent(
                             verticalArrangement = Arrangement.spacedBy(6.dp),
                         ) {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
                             ) {
                                 Icon(
                                     painter = getDrawableIllustration(type = IC_FOLDER_FILL),
                                     contentDescription = null,
-                                    modifier = Modifier
-                                        .size(16.dp),
-                                    tint = ColorScheme.colorScheme.defaultColor
+                                    modifier = Modifier.size(16.dp),
+                                    tint = ColorScheme.colorScheme.defaultColor,
                                 )
 
                                 Text(
@@ -134,8 +147,8 @@ fun SettingsContent(
                                     style = TextStyle(
                                         color = ColorScheme.colorScheme.text.secondaryColor,
                                         fontSize = 10.sp,
-                                        fontWeight = FontWeight(700)
-                                    )
+                                        fontWeight = FontWeight(700),
+                                    ),
                                 )
                             }
 
@@ -144,57 +157,31 @@ fun SettingsContent(
                                 style = TextStyle(
                                     color = ColorScheme.colorScheme.text.primaryColor,
                                     fontSize = 13.sp,
-                                    fontFamily = FontFamily.Monospace
+                                    fontFamily = FontFamily.Monospace,
                                 ),
                             )
                         }
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
+                        state.errorMessage?.let { message ->
                             Text(
-                                text = " ",
-                                modifier = Modifier
-                                    .background(
-                                        color = if (state.isAccessAllowed) {
-                                            ColorScheme.colorScheme.successColor
-                                        } else ColorScheme.colorScheme.alertColor,
-                                        shape = CircleShape,
-                                    )
-                                    .padding(5.dp),
-                            )
-
-                            Text(
-                                text = if (state.isAccessAllowed) {
-                                    "Acesso permitido"
-                                } else "Acesso revogado",
+                                text = message,
                                 style = TextStyle(
                                     fontFamily = helloFontFamily(),
-                                    color = if (state.isAccessAllowed) {
-                                        ColorScheme.colorScheme.successColor
-                                    } else ColorScheme.colorScheme.alertColor,
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.SemiBold
+                                    color = ColorScheme.colorScheme.alertColor,
+                                    fontSize = 12.sp,
                                 ),
                             )
                         }
 
                         PrimaryButton(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = "Alterar pasta",
-                            onClick = {}
-                        )
-
-                        SecondaryButton(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             text = "Reindexar arquivos",
-                            onClick = {}
+                            onClick = {
+                                action(SettingsAction.OnReindexFiles)
+                            },
                         )
                     }
-                }
+                },
             )
 
             DefaultCardUI(
@@ -235,13 +222,13 @@ fun SettingsContent(
 @Preview
 @Composable
 private fun SettingsPreview(
-    @PreviewParameter(LightDarkModePreviewProvider::class) type: ThemeType
+    @PreviewParameter(LightDarkModePreviewProvider::class) type: ThemeType,
 ) {
     HelloTheme(themeType = type) {
         SettingsContent(
             paddingValues = PaddingValues(),
-            state = SettingsState()
+            state = SettingsState(),
+            action = {}
         )
     }
-
 }

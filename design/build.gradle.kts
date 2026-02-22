@@ -37,6 +37,8 @@ kotlin {
         }
 
         commonMain.dependencies {
+            // Domain
+            implementation(project(":domain"))
 
             // Core
             implementation(project(":core"))

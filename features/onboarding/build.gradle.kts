@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.moko.permissions.compose)
             implementation(libs.moko.permissions.gallery)
             implementation(libs.compose.multiplatform.media.player)
+            implementation(libs.filekit.core)
 
             // Compose Resources
             implementation(libs.compose.components.resources)

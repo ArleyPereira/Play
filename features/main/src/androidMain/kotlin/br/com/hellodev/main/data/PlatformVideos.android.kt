@@ -86,11 +86,10 @@ private class AndroidMediaStoreVideoDataSource(
             throw VideoPermissionException()
         }
 
-        if (videos.isNotEmpty()) {
-            return@withContext deduplicate(videos)
-        }
+        val knownFolderVideos = listVideosFromKnownFolders()
+        val mergedVideos = videos + knownFolderVideos
 
-        deduplicate(listVideosFromKnownFolders())
+        deduplicate(mergedVideos)
     }
 
     private fun belongsToVideosFolder(relativePath: String?, absolutePath: String?): Boolean {
@@ -106,15 +105,15 @@ private class AndroidMediaStoreVideoDataSource(
             .trim('/')
 
         if (normalized.isEmpty()) return false
-        return normalized.split('/').any { it == "videos" }
+        return normalized.split('/').any { it == "play" }
     }
 
     private fun listVideosFromKnownFolders(): List<VideoItem> {
         val candidateDirs = listOf(
-            File("/storage/emulated/0/Movies/videos"),
-            File("/storage/emulated/0/videos"),
-            File("/sdcard/Movies/videos"),
-            File("/sdcard/videos"),
+            File("/storage/emulated/0/Movies/play"),
+            File("/storage/emulated/0/play"),
+            File("/sdcard/Movies/play"),
+            File("/sdcard/play"),
         )
 
         return candidateDirs
@@ -230,10 +229,10 @@ private class AndroidMediaStoreVideoDataSource(
         if (baseName.isBlank()) return null
 
         val candidateDirs = listOf(
-            File("/storage/emulated/0/Movies/videos"),
-            File("/storage/emulated/0/videos"),
-            File("/sdcard/Movies/videos"),
-            File("/sdcard/videos"),
+            File("/storage/emulated/0/Movies/play"),
+            File("/storage/emulated/0/play"),
+            File("/sdcard/Movies/play"),
+            File("/sdcard/play"),
         )
 
         return candidateDirs

@@ -24,7 +24,7 @@ private class IOSVideoDataSource : VideoDataSource {
         val documentsDir = (NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, true)
             .firstOrNull() as? String) ?: return@withContext emptyList()
 
-        val videosDirectory = "$documentsDir/videos"
+        val videosDirectory = "$documentsDir/play"
 
         if (!fileManager.fileExistsAtPath(videosDirectory)) {
             fileManager.createDirectoryAtPath(videosDirectory, true, null, null)

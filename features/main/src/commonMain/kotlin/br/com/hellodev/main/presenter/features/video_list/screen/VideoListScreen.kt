@@ -31,6 +31,7 @@ import br.com.hellodev.main.presenter.features.video_list.action.VideoListAction
 import br.com.hellodev.main.presenter.features.video_list.component.VideoListItem
 import br.com.hellodev.main.presenter.features.video_list.state.VideoListState
 import br.com.hellodev.main.presenter.features.video_list.viewmodel.VideoListViewModel
+import br.com.hellodev.main.presenter.features.video_list.reindex.VideoListReindexSignal
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -42,11 +43,20 @@ fun VideoListScreen(
     val dataSource = rememberVideoDataSource()
     val viewModel = koinViewModel<VideoListViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val reindexSignal by VideoListReindexSignal.signal.collectAsStateWithLifecycle()
 
     LaunchedEffect(dataSource) {
         viewModel.dispatchAction(
             VideoListAction.Refresh(dataSource = dataSource)
         )
+    }
+
+    LaunchedEffect(reindexSignal) {
+        if (reindexSignal > 0L) {
+            viewModel.dispatchAction(
+                VideoListAction.Refresh(dataSource = dataSource)
+            )
+        }
     }
 
     LaunchedEffect(state.isPermissionRequired) {

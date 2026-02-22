@@ -21,6 +21,7 @@ kotlin {
     }
 
     listOf(
+        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -52,13 +53,11 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-            // Moko Permissions
-            //implementation(libs.moko.permissions)
-            //implementation(libs.moko.permissions.compose)
-            //implementation(libs.moko.permissions.gallery)
-
             // Media Player
             implementation(libs.compose.multiplatform.media.player)
+
+            // FileKit
+            implementation(libs.filekit.dialogs.compose)
 
             // Compose Resources
             implementation(libs.compose.components.resources)

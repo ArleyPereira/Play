@@ -1,0 +1,32 @@
+package br.com.hellodev.core.constants
+
+object LocalPreferencesKeys {
+    const val USER_PREFERENCES_KEY = "user"
+    const val THEME_TYPE_KEY = "THEME_TYPE_KEY"
+}
+
+object Time {
+    const val FEED_BACK_DISMISS_TIME = 3000L
+}
+
+object Navigation {
+    const val PROFILE_SCREEN_KEY = "PROFILE_SCREEN_KEY"
+}
+
+object Preferences {
+    const val ONBOARDING_VIEWED = "ONBOARDING_VIEWED"
+    const val USER_PREFERENCES = "USER_PREFERENCES"
+    const val SHOW_AMOUNTS = "SHOW_AMOUNTS"
+}
+
+object BackResult {
+    const val MESSAGE_BACK_RESULT = "MESSAGE_BACK_RESULT"
+
+    const val BANK_ID_BACK_RESULT = "BANK_ID_BACK_RESULT"
+    const val CARD_ID_BACK_RESULT = "CARD_ID_BACK_RESULT"
+
+    const val INSTALLMENTS_ID_BACK_RESULT = "INSTALLMENTS_ID_BACK_RESULT"
+    const val INSTALLMENTS_COUNT_BACK_RESULT = "INSTALLMENTS_COUNT_BACK_RESULT"
+    const val INSTALLMENTS_VALUE_BACK_RESULT = "INSTALLMENTS_VALUE_BACK_RESULT"
+    const val INSTALLMENTS_LAST_VALUE_BACK_RESULT = "INSTALLMENTS_LAST_VALUE_BACK_RESULT"
+}

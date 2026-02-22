@@ -18,6 +18,6 @@ sealed class BottomBarRoutes {
         val thumbnailPath: String?,
         val sizeInBytes: Long,
         val durationMillis: Long?,
-    ) : MainRoutes()
+    ) : BottomBarRoutes()
 
 }

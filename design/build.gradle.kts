@@ -37,6 +37,10 @@ kotlin {
         }
 
         commonMain.dependencies {
+
+            // Core
+            implementation(project(":core"))
+
             // Material 3
             implementation(libs.material3)
 

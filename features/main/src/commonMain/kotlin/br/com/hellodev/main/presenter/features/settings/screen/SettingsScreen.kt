@@ -1,0 +1,247 @@
+package br.com.hellodev.main.presenter.features.settings.screen
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import br.com.hellodev.core.enums.illustration.IllustrationType.IC_FOLDER_FILL
+import br.com.hellodev.design.presenter.components.button.PrimaryButton
+import br.com.hellodev.design.presenter.components.button.SecondaryButton
+import br.com.hellodev.design.presenter.components.card.default.DefaultCardUI
+import br.com.hellodev.design.presenter.components.icon.illustration.getDrawableIllustration
+import br.com.hellodev.design.presenter.theme.ColorScheme
+import br.com.hellodev.design.presenter.theme.HelloTheme
+import br.com.hellodev.design.presenter.theme.ThemeType
+import br.com.hellodev.design.presenter.theme.borderDefault
+import br.com.hellodev.design.presenter.theme.helloFontFamily
+import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
+import br.com.hellodev.main.presenter.features.settings.state.SettingsState
+import br.com.hellodev.main.presenter.features.settings.viewmodel.SettingsViewModel
+import org.koin.compose.viewmodel.koinViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(
+    paddingValues: PaddingValues
+) {
+    val viewModel = koinViewModel<SettingsViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    SettingsContent(
+        paddingValues = paddingValues,
+        state = state
+    )
+}
+
+@Composable
+fun SettingsContent(
+    paddingValues: PaddingValues,
+    state: SettingsState
+) {
+    Scaffold(
+        containerColor = ColorScheme.colorScheme.screen.backgroundPrimary
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            Column(
+                verticalArrangement = Arrangement
+                    .spacedBy(4.dp)
+            ) {
+                Text(
+                    text = "Pasta atual dos vídeos",
+                    style = TextStyle(
+                        color = ColorScheme.colorScheme.text.primaryColor,
+                        fontFamily = helloFontFamily(),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight(700)
+                    ),
+                )
+
+                Text(
+                    text = "Gerencie o local onde seus vídeos estão armazenados.",
+                    style = TextStyle(
+                        fontFamily = helloFontFamily(),
+                        color = ColorScheme.colorScheme.text.secondaryColor,
+                        fontSize = 13.sp,
+                    ),
+                )
+            }
+
+            DefaultCardUI(
+                content = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = ColorScheme.colorScheme.screen.backgroundSecondary,
+                                    shape = RoundedCornerShape(16.dp),
+                                )
+                                .borderDefault(shape = RoundedCornerShape(16.dp))
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp),
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Icon(
+                                    painter = getDrawableIllustration(type = IC_FOLDER_FILL),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(16.dp),
+                                    tint = ColorScheme.colorScheme.defaultColor
+                                )
+
+                                Text(
+                                    text = "CAMINHO DO DIRETÓRIO",
+                                    style = TextStyle(
+                                        color = ColorScheme.colorScheme.text.secondaryColor,
+                                        fontSize = 10.sp,
+                                        fontWeight = FontWeight(700)
+                                    )
+                                )
+                            }
+
+                            Text(
+                                text = state.currentFolderPath,
+                                style = TextStyle(
+                                    color = ColorScheme.colorScheme.text.primaryColor,
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily.Monospace
+                                ),
+                            )
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Text(
+                                text = " ",
+                                modifier = Modifier
+                                    .background(
+                                        color = if (state.isAccessAllowed) {
+                                            ColorScheme.colorScheme.successColor
+                                        } else ColorScheme.colorScheme.alertColor,
+                                        shape = CircleShape,
+                                    )
+                                    .padding(5.dp),
+                            )
+
+                            Text(
+                                text = if (state.isAccessAllowed) {
+                                    "Acesso permitido"
+                                } else "Acesso revogado",
+                                style = TextStyle(
+                                    fontFamily = helloFontFamily(),
+                                    color = if (state.isAccessAllowed) {
+                                        ColorScheme.colorScheme.successColor
+                                    } else ColorScheme.colorScheme.alertColor,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                            )
+                        }
+
+                        PrimaryButton(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = "Alterar pasta",
+                            onClick = {}
+                        )
+
+                        SecondaryButton(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = "Reindexar arquivos",
+                            onClick = {}
+                        )
+                    }
+                }
+            )
+
+            DefaultCardUI(
+                shape = RoundedCornerShape(16.dp),
+                content = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                    ) {
+                        Text(
+                            text = "Informações",
+                            style = TextStyle(
+                                color = ColorScheme.colorScheme.defaultColor,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                        )
+
+                        HorizontalDivider(color = ColorScheme.colorScheme.divider.color)
+
+                        Text(
+                            text = "Os vídeos e miniaturas serão lidos automaticamente da pasta selecionada acima para exibição no player. Certifique-se de que a pasta contém arquivos de vídeo compatíveis (.mp4).",
+                            style = TextStyle(
+                                color = ColorScheme.colorScheme.text.secondaryColor,
+                                fontSize = 13.sp,
+                                lineHeight = 20.sp,
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun SettingsPreview(
+    @PreviewParameter(LightDarkModePreviewProvider::class) type: ThemeType
+) {
+    HelloTheme(themeType = type) {
+        SettingsContent(
+            paddingValues = PaddingValues(),
+            state = SettingsState()
+        )
+    }
+
+}

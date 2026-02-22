@@ -76,3 +76,7 @@ kotlin {
     }
 
 }
+
+dependencies {
+    androidRuntimeClasspath(libs.androidx.ui.tooling)
+}

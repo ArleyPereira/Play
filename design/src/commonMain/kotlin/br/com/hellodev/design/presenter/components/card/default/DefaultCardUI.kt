@@ -18,26 +18,42 @@ import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
 fun DefaultCardUI(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = RoundedCornerShape(28.dp),
+    shape: Shape = RoundedCornerShape(16.dp),
     content: @Composable () -> Unit,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
-    Card(
-        onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = ColorScheme.colorScheme.screen.backgroundSecondary,
-            disabledContainerColor = ColorScheme.colorScheme.screen.backgroundSecondary
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        ),
-        //border = borderStrokeDefault(),
-        shape = shape,
-        enabled = enabled,
-        content = { content() }
-    )
+
+    if (onClick != null) {
+        Card(
+            onClick = onClick,
+            modifier = modifier
+                .fillMaxWidth(),
+            enabled = enabled,
+            shape = shape,
+            colors = CardDefaults.cardColors(
+                containerColor = ColorScheme.colorScheme.screen.backgroundSecondary,
+                disabledContainerColor = ColorScheme.colorScheme.screen.backgroundSecondary
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 4.dp
+            ),
+            content = { content() }
+        )
+    } else {
+        Card(
+            modifier = modifier
+                .fillMaxWidth(),
+            shape = shape,
+            colors = CardDefaults.cardColors(
+                containerColor = ColorScheme.colorScheme.screen.backgroundSecondary,
+                disabledContainerColor = ColorScheme.colorScheme.screen.backgroundSecondary
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 4.dp
+            ),
+            content = { content() }
+        )
+    }
 }
 
 @Preview

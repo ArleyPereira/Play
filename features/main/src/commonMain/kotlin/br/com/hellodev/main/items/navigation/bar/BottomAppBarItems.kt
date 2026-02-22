@@ -1,6 +1,6 @@
 package br.com.hellodev.main.items.navigation.bar
 
-import br.com.hellodev.design.presenter.theme.illustration.IllustrationType
+import br.com.hellodev.core.enums.illustration.IllustrationType
 import br.com.hellodev.main.presenter.navigation.routes.BottomBarRoutes
 import org.jetbrains.compose.resources.StringResource
 import play.features.main.generated.resources.label_home_bottom_app_bar

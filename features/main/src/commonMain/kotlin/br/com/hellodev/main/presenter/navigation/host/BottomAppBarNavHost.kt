@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import br.com.hellodev.domain.model.video.VideoItem
+import br.com.hellodev.main.presenter.features.settings.screen.SettingsScreen
 import br.com.hellodev.main.presenter.features.video_list.screen.VideoListScreen
 import br.com.hellodev.main.presenter.features.video_player.screen.VideoPlayerScreen
 import br.com.hellodev.main.presenter.navigation.routes.BottomBarRoutes
@@ -49,7 +50,7 @@ fun BottomAppBarNavHost(
         }
 
         composable<BottomBarRoutes.Settings> {
-
+            SettingsScreen(paddingValues = paddingValues)
         }
 
         composable<BottomBarRoutes.VideoPlayer> { backStackEntry ->

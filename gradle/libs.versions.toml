@@ -15,6 +15,7 @@ kotlinx-serialization-json = "1.10.0"
 moko-permissions = "0.20.1"
 compose-multiplatform-media-player = "1.0.53"
 filekit = "0.12.0"
+swipeableKmp = "1.0.4"
 
 [libraries]
 # AndroidX
@@ -53,6 +54,9 @@ compose-multiplatform-media-player = { module = "network.chaintech:compose-multi
 # FileKit
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
 filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekit" }
+
+# Swipeable
+swipeable-kmp = { module = "com.stevdza-san:swipeable-kmp", version.ref = "swipeableKmp" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

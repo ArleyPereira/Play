@@ -29,9 +29,9 @@ import br.com.hellodev.domain.model.video.VideoItem
 import br.com.hellodev.main.data.rememberVideoDataSource
 import br.com.hellodev.main.presenter.features.video_list.action.VideoListAction
 import br.com.hellodev.main.presenter.features.video_list.component.VideoListItem
+import br.com.hellodev.main.presenter.features.video_list.reindex.VideoListReindexSignal
 import br.com.hellodev.main.presenter.features.video_list.state.VideoListState
 import br.com.hellodev.main.presenter.features.video_list.viewmodel.VideoListViewModel
-import br.com.hellodev.main.presenter.features.video_list.reindex.VideoListReindexSignal
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -146,12 +146,16 @@ private fun VideoListContent(
                         contentPadding = paddingValues,
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        items(state.videos, key = VideoItem::id) { video ->
+                        items(
+                            items = state.videos,
+                            key = VideoItem::id
+                        ) { video ->
                             VideoListItem(
                                 video = video,
                                 onClick = {
                                     navigateToVideoPlayerScreen(video)
                                 },
+                                onDeleteSwipe = { },
                             )
                         }
                     }

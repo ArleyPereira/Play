@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +24,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.Image
 import br.com.hellodev.domain.model.video.VideoItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -84,6 +84,16 @@ private fun loadThumbnail(
     videoPath: String,
     imagePath: String?,
 ): Bitmap? {
+    val videoFile = File(videoPath)
+    val isContentUri = runCatching {
+        val uri = Uri.parse(videoPath)
+        uri.scheme == "content"
+    }.getOrDefault(false)
+
+    if (!isContentUri && (!videoFile.exists() || !videoFile.isFile)) {
+        return null
+    }
+
     val resolvedImagePath = imagePath ?: findCompanionThumbnailPath(
         videoName = videoName,
         videoPath = videoPath,
@@ -111,11 +121,15 @@ private fun loadThumbnail(
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        return ThumbnailUtils.createVideoThumbnail(File(videoPath), Size(320, 180), null)
+        return runCatching {
+            ThumbnailUtils.createVideoThumbnail(videoFile, Size(320, 180), null)
+        }.getOrNull()
     }
 
     @Suppress("DEPRECATION")
-    return ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND)
+    return runCatching {
+        ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND)
+    }.getOrNull()
 }
 
 private fun findCompanionThumbnailPath(

@@ -6,5 +6,7 @@ enum class IllustrationType {
     IC_HOME_FILL,
     IC_SETTINGS_LINE,
     IC_SETTINGS_FILL,
-    IC_FOLDER_FILL
+    IC_FOLDER_FILL,
+    IC_DELETE_LINE,
+    IC_DELETE_FILL,
 }

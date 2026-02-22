@@ -9,6 +9,6 @@ object VideoListReindexSignal {
     val signal: StateFlow<Long> = _signal.asStateFlow()
 
     fun requestReindex() {
-        _signal.value = _signal.value + 1L
+        _signal.value += 1L
     }
 }

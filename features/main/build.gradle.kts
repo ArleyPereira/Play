@@ -59,6 +59,9 @@ kotlin {
             // FileKit
             implementation(libs.filekit.dialogs.compose)
 
+            // Swipeable
+            implementation(libs.swipeable.kmp)
+
             // Compose Resources
             implementation(libs.compose.components.resources)
             implementation(libs.compose.navigation)

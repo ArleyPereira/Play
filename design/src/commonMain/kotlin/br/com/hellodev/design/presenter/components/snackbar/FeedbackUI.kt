@@ -30,7 +30,7 @@ import br.com.hellodev.core.enums.feedback.FeedbackType.SUCCESS
 import br.com.hellodev.core.enums.feedback.FeedbackType.WARNING
 import br.com.hellodev.design.presenter.theme.ColorScheme
 import br.com.hellodev.design.presenter.theme.HelloTheme
-import br.com.hellodev.design.presenter.theme.ThemeType
+import br.com.hellodev.core.enums.theme.ThemeType
 import br.com.hellodev.design.presenter.theme.helloFontFamily
 import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
 import br.com.hellodev.domain.model.feedback.Feedback

@@ -1,11 +1,11 @@
-package br.com.hellodev.main.data
+package br.com.hellodev.design.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import br.com.hellodev.domain.model.video.VideoItem
+import br.com.hellodev.domain.model.video.Video
 
 @Composable
 expect fun PlatformVideoThumbnail(
-    video: VideoItem,
+    video: Video,
     modifier: Modifier = Modifier,
 )

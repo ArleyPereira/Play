@@ -26,7 +26,7 @@ import br.com.hellodev.design.presenter.components.bar.bottom.BottomBarItemUI
 import br.com.hellodev.design.presenter.components.icon.illustration.getDrawableIllustration
 import br.com.hellodev.design.presenter.theme.ColorScheme
 import br.com.hellodev.design.presenter.theme.HelloTheme
-import br.com.hellodev.design.presenter.theme.ThemeType
+import br.com.hellodev.core.enums.theme.ThemeType
 import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
 import br.com.hellodev.main.items.navigation.bar.BottomAppBarItems
 import br.com.hellodev.main.presenter.navigation.host.BottomAppBarNavHost

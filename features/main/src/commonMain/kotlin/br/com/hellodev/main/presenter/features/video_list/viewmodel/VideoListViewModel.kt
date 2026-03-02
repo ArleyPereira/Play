@@ -2,6 +2,9 @@ package br.com.hellodev.main.presenter.features.video_list.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.hellodev.core.enums.sheet.BottomSheetType
+import br.com.hellodev.domain.model.sheet.DefaultSheetModel
+import br.com.hellodev.domain.model.video.Video
 import br.com.hellodev.main.data.VideoDataSource
 import br.com.hellodev.main.data.VideoPermissionException
 import br.com.hellodev.main.presenter.features.video_list.action.VideoListAction
@@ -19,7 +22,18 @@ class VideoListViewModel : ViewModel() {
     fun dispatchAction(action: VideoListAction) {
         when (action) {
             is VideoListAction.Refresh -> refresh(dataSource = action.dataSource)
-            is VideoListAction.OnVideoClick -> Unit
+
+            is VideoListAction.OnVideoSelected -> {
+                oVideoSelected(video = action.video)
+            }
+
+            is VideoListAction.SetCurrentBottomSheet -> {
+                setCurrentBottomSheet(type = action.type)
+            }
+
+            is VideoListAction.ClearBottomSheet -> {
+                clearBottomSheet()
+            }
         }
     }
 
@@ -63,4 +77,18 @@ class VideoListViewModel : ViewModel() {
             _state.value = nextState
         }
     }
+
+    private fun oVideoSelected(video: Video) {
+        _state.update { it.copy(videoSelected = video) }
+        setCurrentBottomSheet(BottomSheetType.REMOVE_VIDEO)
+    }
+
+    private fun setCurrentBottomSheet(type: BottomSheetType) {
+        _state.update { it.copy(sheetModel = DefaultSheetModel(type)) }
+    }
+
+    private fun clearBottomSheet() {
+        _state.update { it.copy(sheetModel = null) }
+    }
+
 }

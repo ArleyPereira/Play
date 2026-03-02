@@ -9,6 +9,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import br.com.hellodev.core.enums.theme.ThemeType
 import br.com.hellodev.design.presenter.ChangeSchemeColor
 import br.com.hellodev.design.presenter.theme.scheme.BorderColorScheme
 import br.com.hellodev.design.presenter.theme.scheme.ButtonColorScheme

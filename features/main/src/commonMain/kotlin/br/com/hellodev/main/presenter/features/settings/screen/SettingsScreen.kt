@@ -34,7 +34,7 @@ import br.com.hellodev.design.presenter.components.icon.illustration.getDrawable
 import br.com.hellodev.design.presenter.components.snackbar.FeedbackUI
 import br.com.hellodev.design.presenter.theme.ColorScheme
 import br.com.hellodev.design.presenter.theme.HelloTheme
-import br.com.hellodev.design.presenter.theme.ThemeType
+import br.com.hellodev.core.enums.theme.ThemeType
 import br.com.hellodev.design.presenter.theme.borderDefault
 import br.com.hellodev.design.presenter.theme.helloFontFamily
 import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
@@ -176,6 +176,7 @@ fun SettingsContent(
                         PrimaryButton(
                             modifier = Modifier.fillMaxWidth(),
                             text = "Reindexar arquivos",
+                            isLoading = state.isLoading,
                             onClick = {
                                 action(SettingsAction.OnReindexFiles)
                             },
@@ -205,7 +206,7 @@ fun SettingsContent(
                         HorizontalDivider(color = ColorScheme.colorScheme.divider.color)
 
                         Text(
-                            text = "Os vídeos e miniaturas serão lidos automaticamente da pasta selecionada acima para exibição no player. Certifique-se de que a pasta contém arquivos de vídeo compatíveis (.mp4).",
+                            text = "Ao reindexar, os arquivos da pasta pública serão copiados para o armazenamento privado do app (play/videos e play/thumbs). A listagem e reprodução usam os arquivos privados.",
                             style = TextStyle(
                                 color = ColorScheme.colorScheme.text.secondaryColor,
                                 fontSize = 13.sp,

@@ -1,5 +1,6 @@
-package br.com.hellodev.main.data
+package br.com.hellodev.design.platform
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
@@ -11,7 +12,6 @@ import android.util.Size
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,14 +24,14 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import br.com.hellodev.domain.model.video.VideoItem
+import br.com.hellodev.domain.model.video.Video
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
 @Composable
 actual fun PlatformVideoThumbnail(
-    video: VideoItem,
+    video: Video,
     modifier: Modifier,
 ) {
     val context = LocalContext.current
@@ -43,8 +43,8 @@ actual fun PlatformVideoThumbnail(
         value = withContext(Dispatchers.IO) {
             loadThumbnail(
                 context = context,
-                videoName = video.name,
-                videoPath = video.path,
+                videoName = video.name.orEmpty(),
+                videoPath = video.path.orEmpty(),
                 imagePath = video.thumbnailPath,
             )
         }
@@ -79,7 +79,7 @@ private fun ThumbnailPlaceholder(modifier: Modifier) {
 }
 
 private fun loadThumbnail(
-    context: android.content.Context,
+    context: Context,
     videoName: String,
     videoPath: String,
     imagePath: String?,
@@ -163,7 +163,7 @@ private fun isThumbnailFile(fileName: String): Boolean {
         lowerCase.endsWith(".png")
 }
 
-private fun loadImageThumbnail(context: android.content.Context, path: String): Bitmap? {
+private fun loadImageThumbnail(context: Context, path: String): Bitmap? {
     val uri = runCatching { Uri.parse(path) }.getOrNull()
     if (uri != null && uri.scheme == "content") {
         return runCatching {

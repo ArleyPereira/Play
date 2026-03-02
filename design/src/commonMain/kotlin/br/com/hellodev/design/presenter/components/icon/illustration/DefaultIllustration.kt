@@ -39,18 +39,3 @@ fun getDrawableIllustration(
         }
     )
 }
-
-fun getDrawableIllustrationResourceByType(
-    type: IllustrationType
-): org.jetbrains.compose.resources.DrawableResource {
-    return when (type) {
-        IC_ARROW_LEFT -> Res.drawable.ic_arrow_left
-        IC_HOME_LINE -> Res.drawable.ic_home_line
-        IC_HOME_FILL -> Res.drawable.ic_home_fill
-        IC_SETTINGS_LINE -> Res.drawable.ic_settings_line
-        IC_SETTINGS_FILL -> Res.drawable.ic_settings_fill
-        IC_FOLDER_FILL -> Res.drawable.ic_folder_fill
-        IC_DELETE_LINE -> Res.drawable.ic_delete_line
-        IC_DELETE_FILL -> Res.drawable.ic_delete_fill
-    }
-}

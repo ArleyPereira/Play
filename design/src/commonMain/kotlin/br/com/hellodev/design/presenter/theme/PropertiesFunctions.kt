@@ -27,7 +27,7 @@ val ShapeBottomSheet = RoundedCornerShape(
 
 @Composable
 fun Modifier.borderDefault(
-    width: Dp = 1.dp,
+    width: Dp = 2.dp,
     color: Color = ColorScheme.colorScheme.border.unselected,
     shape: Shape = CircleShape
 ): Modifier {
@@ -45,7 +45,7 @@ fun Modifier.borderDefault(
 @Composable
 fun borderStrokeDefault(
     isSelect: Boolean = false,
-    width: Dp = 1.dp,
+    width: Dp = 2.dp,
     selectedColor: Color = ColorScheme.colorScheme.border.selected,
     unselectedColor: Color = ColorScheme.colorScheme.border.unselected
 ): BorderStroke {
@@ -59,17 +59,5 @@ fun borderStrokeDefault(
             width = width,
             color = unselectedColor
         )
-    }
-}
-
-@Composable
-fun iconTintColor(
-    filled: Boolean,
-    isError: Boolean = false
-): Color {
-    return when {
-        isError -> ColorScheme.colorScheme.alertColor
-        filled -> ColorScheme.colorScheme.defaultColor
-        else -> ColorScheme.colorScheme.icon.color
     }
 }

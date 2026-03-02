@@ -1,9 +1,9 @@
 package br.com.hellodev.design.presenter.components.button
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,29 +18,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.hellodev.core.enums.theme.ThemeType
 import br.com.hellodev.design.presenter.components.loading.CircularProgressLoading
+import br.com.hellodev.design.presenter.theme.AlertColor
 import br.com.hellodev.design.presenter.theme.ColorScheme
 import br.com.hellodev.design.presenter.theme.HelloTheme
 import br.com.hellodev.design.presenter.theme.helloFontFamily
 import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
 
 @Composable
-fun PrimaryButton(
+fun AlertButton(
     modifier: Modifier = Modifier,
     text: String,
     enabled: Boolean = true,
     isLoading: Boolean = false,
-    colors: ButtonColors = ButtonDefaults.buttonColors(
-        containerColor = ColorScheme.colorScheme.button.primaryBackground,
-        disabledContainerColor = ColorScheme.colorScheme.disabledDefaultColor
-    ),
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = modifier
+            .fillMaxWidth()
             .height(58.dp),
         enabled = enabled && !isLoading,
-        colors = colors,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = AlertColor,
+            disabledContainerColor = ColorScheme.colorScheme.disabledDefaultColor
+        ),
         content = {
             if (isLoading) {
                 CircularProgressLoading(
@@ -52,6 +53,7 @@ fun PrimaryButton(
                 Text(
                     text = text,
                     style = TextStyle(
+                        fontSize = 16.sp,
                         lineHeight = 22.4.sp,
                         fontFamily = helloFontFamily(),
                         fontWeight = FontWeight.Bold,
@@ -61,18 +63,19 @@ fun PrimaryButton(
                     )
                 )
             }
+
         }
     )
 }
 
 @Preview
 @Composable
-private fun PrimaryButtonPreview(
+private fun AlertButtonPreview(
     @PreviewParameter(LightDarkModePreviewProvider::class) type: ThemeType
 ) {
     HelloTheme(themeType = type) {
-        PrimaryButton(
-            text = "Continuar",
+        AlertButton(
+            text = "Remover",
             isLoading = false,
             enabled = true,
             onClick = {}

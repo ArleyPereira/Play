@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import br.com.hellodev.design.presenter.theme.ColorScheme
-import br.com.hellodev.design.presenter.theme.ThemeType
+import br.com.hellodev.core.enums.theme.ThemeType
 import br.com.hellodev.design.provider.preview.LightDarkModePreviewProvider
 
 @Composable

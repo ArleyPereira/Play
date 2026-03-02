@@ -7,7 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import br.com.hellodev.domain.model.video.VideoItem
+import br.com.hellodev.core.extensions.long.orZero
+import br.com.hellodev.domain.model.video.Video
 import br.com.hellodev.main.presenter.features.settings.screen.SettingsScreen
 import br.com.hellodev.main.presenter.features.video_list.screen.VideoListScreen
 import br.com.hellodev.main.presenter.features.video_player.screen.VideoPlayerScreen
@@ -30,11 +31,11 @@ fun BottomAppBarNavHost(
                 navigateToVideoPlayerScreen = { video ->
                     navHostController.navigate(
                         BottomBarRoutes.VideoPlayer(
-                            id = video.id,
-                            name = video.name,
-                            path = video.path,
+                            id = video.id.orEmpty(),
+                            name = video.name.orEmpty(),
+                            path = video.path.orEmpty(),
                             thumbnailPath = video.thumbnailPath,
-                            sizeInBytes = video.sizeInBytes,
+                            sizeInBytes = video.sizeInBytes.orZero(),
                             durationMillis = video.durationMillis,
                         ),
                     )
@@ -56,7 +57,7 @@ fun BottomAppBarNavHost(
         composable<BottomBarRoutes.VideoPlayer> { backStackEntry ->
             val route = backStackEntry.toRoute<BottomBarRoutes.VideoPlayer>()
 
-            val video = VideoItem(
+            val video = Video(
                 id = route.id,
                 name = route.name,
                 path = route.path,

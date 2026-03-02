@@ -43,6 +43,9 @@ kotlin {
             // Core
             implementation(project(":core"))
 
+            // Swipeable
+            implementation(libs.swipeable.kmp)
+
             // Material 3
             implementation(libs.material3)
 

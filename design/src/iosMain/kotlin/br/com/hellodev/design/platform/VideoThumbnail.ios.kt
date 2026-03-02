@@ -1,4 +1,4 @@
-package br.com.hellodev.main.data
+package br.com.hellodev.design.platform
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,11 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import br.com.hellodev.domain.model.video.VideoItem
+import br.com.hellodev.domain.model.video.Video
 
 @Composable
 actual fun PlatformVideoThumbnail(
-    video: VideoItem,
+    video: Video,
     modifier: Modifier,
 ) {
     Box(

@@ -1,6 +1,6 @@
 # Play
 
-App **Kotlin Multiplatform** para listar e reproduzir vídeos locais no dispositivo, com foco em uma experiência simples e rápida em **Android** e **iOS**.
+App **Compose Multiplatform** para listar e reproduzir vídeos locais no dispositivo, com foco em uma experiência simples e rápida em **Android** e **iOS**.
 
 ## Proposta
 
@@ -26,9 +26,17 @@ O objetivo do Play é centralizar a visualização de vídeos do aparelho em uma
 
 ## Capturas de tela
 
-| Lista de vídeos | Player |
-|---|---|
-| ![Lista de vídeos](docs/images/home.png) | ![Player de vídeo](docs/images/player.png) |
+### Tela Inicial (Lista de vídeos)
+
+<img src="docs/images/home.png" alt="Tela inicial com lista de vídeos" width="220" />
+
+### Tela de Configurações
+
+<img src="docs/images/settings.png" alt="Tela de configurações com reindexação" width="220" />
+
+### Tela do Player (Modo paisagem)
+
+<img src="docs/images/player-fullscreen.png" alt="Tela do player em modo paisagem" width="420" />
 
 ## Estrutura (resumo)
 

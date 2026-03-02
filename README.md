@@ -1,35 +1,64 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Play
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+App **Kotlin Multiplatform** para listar e reproduzir vídeos locais no dispositivo, com foco em uma experiência simples e rápida em **Android** e **iOS**.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Proposta
 
-### Build and Run Android Application
+O objetivo do Play é centralizar a visualização de vídeos do aparelho em uma interface limpa, com:
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+- listagem dos vídeos disponíveis
+- miniaturas para identificação rápida
+- player em tela cheia
+- fluxo de permissões para acesso aos arquivos
 
-### Build and Run iOS Application
+## Como o app funciona
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+1. Ao abrir o app, o usuário concede permissão para acessar a galeria/arquivos de mídia.
+2. O app indexa e organiza os vídeos para uso interno.
+3. A tela principal exibe a lista de vídeos encontrados.
+4. Ao tocar em um item, o vídeo é aberto no player.
+5. O usuário pode controlar reprodução, progresso e retorno para a lista.
 
----
+## Plataformas
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+- Android
+- iOS
+
+## Capturas de tela
+
+| Lista de vídeos | Player |
+|---|---|
+| ![Lista de vídeos](docs/images/home.png) | ![Player de vídeo](docs/images/player.png) |
+
+## Estrutura (resumo)
+
+- `composeApp`: entrada do app Compose Multiplatform
+- `androidApp`: configuração/host Android
+- `iosApp`: host iOS (Xcode)
+- `features`: funcionalidades (lista de vídeos, player, onboarding)
+- `design`: componentes visuais compartilhados
+- `core`, `domain`, `di`: base, modelos e injeção de dependência
+
+## Executar o projeto
+
+### Android
+
+```bash
+./gradlew :composeApp:assembleDebug
+```
+
+### iOS
+
+Abra `iosApp/iosApp.xcodeproj` no Xcode e execute o target do app.
+
+## Contribuições
+
+Contribuições são bem-vindas.
+
+Se quiser colaborar:
+
+1. Faça um fork do repositório
+2. Crie uma branch para sua feature/correção
+3. Envie um Pull Request com uma descrição clara da mudança
+
+Sugestões, melhorias de UX, otimizações e correções de bugs são muito bem-vindas.
